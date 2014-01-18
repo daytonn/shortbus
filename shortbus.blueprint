@@ -1,0 +1,8 @@
+blueprint: default
+src_dir: src
+build_dir: lib
+asset_root: ../
+output: compressed
+template_dir: templates
+template_namespace: templates
+name: shortbus
