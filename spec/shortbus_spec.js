@@ -38,16 +38,23 @@ describe("ShortBus", function() {
 
   describe("events", function() {
     var handler;
+    var foreignContext;
     beforeEach(function() {
+      foreignContext = {
+        name: "foreign",
+        handler: function() {
+          this.name = "changed";
+        }
+      };
       handler = jasmine.createSpy();
+      ShortBus.on("someEvent", handler);
+    });
+
+    afterEach(function() {
+      ShortBus.__events__ = {};
     });
 
     describe("on", function() {
-      beforeEach(function() {
-        // TODO: pass context and bind handler to it
-        ShortBus.on("someEvent", handler);
-      });
-
       it("registers a handler for an event", function() {
         expect(ShortBus.__events__.someEvent).toEqual([handler]);
       });
@@ -56,8 +63,9 @@ describe("ShortBus", function() {
     describe("trigger", function() {
       beforeEach(function() {
         ShortBus.on("someEvent", handler);
-        ShortBus.on("someEvent", handler);
+        ShortBus.on("boundHandler", foreignContext.handler, foreignContext);
         ShortBus.trigger("someEvent");
+        ShortBus.trigger("boundHandler");
       });
 
       it("triggers events", function() {
@@ -66,6 +74,23 @@ describe("ShortBus", function() {
 
       it("deduplicates the handlers", function() {
         expect(handler.calls.count()).toEqual(1);
+      });
+
+      it("binds a context to the event handler", function() {
+        expect(foreignContext.name).toEqual("changed");
+      });
+    });
+
+    describe("off", function() {
+      it("removes all handlers from an event if only the event name is passed", function() {
+        ShortBus.off("someEvent");
+        expect(ShortBus.__events__.someEvent.length).toEqual(0);
+      });
+
+      it("removes an event handler if the hander is passed", function() {
+        ShortBus.on("someEvent", foreignContext.handler, foreignContext);
+        ShortBus.off("someEvent", handler);
+        expect(ShortBus.__events__.someEvent.length).toEqual(1);
       });
     });
   });
