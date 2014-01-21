@@ -83,7 +83,7 @@ The trigger method allows you to trigger a method and call every handler attache
 
 ```js
 ShortBus.trigger("eventName");
-``
+```
 
 To pass data to the event handlers simply pass additional arguments to the trigger method:
 
