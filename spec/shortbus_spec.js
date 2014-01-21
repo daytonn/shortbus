@@ -64,7 +64,7 @@ describe("ShortBus", function() {
       beforeEach(function() {
         ShortBus.on("someEvent", handler);
         ShortBus.on("boundHandler", foreignContext.handler, foreignContext);
-        ShortBus.trigger("someEvent");
+        ShortBus.trigger("someEvent", "one", "two");
         ShortBus.trigger("boundHandler");
       });
 
@@ -78,6 +78,10 @@ describe("ShortBus", function() {
 
       it("binds a context to the event handler", function() {
         expect(foreignContext.name).toEqual("changed");
+      });
+
+      it("passes the tail of the arguments array to the handler", function() {
+        expect(handler).toHaveBeenCalledWith("one", "two");
       });
     });
 

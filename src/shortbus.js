@@ -51,8 +51,10 @@
 
     // Remove event handlers
     off: function(event, handler) {
-      // create an
+      // create an array for handlers we're keeping
       var keptHandlers = [];
+      // If passed a specific handler, loop through
+      // the events to find and remove it
       if (handler) {
         for (var key in this.__events__[event]) {
           if (this.__events__[event].hasOwnProperty(key) && handler !== this.__events__[event][key]) {
@@ -61,15 +63,23 @@
         }
         this.__events__[event] = keptHandlers;
       } else {
+        // Remove all events for this handler
         this.__events__[event].length = 0;
       }
     },
 
-    trigger: function(event) {
+    // Trigger a given event
+    trigger: function() {
+      // Convert the arguments to an array to pass to the handler
+      var args = Array.prototype.slice.call(arguments);
+      // Shift off the event name
+      var event = args.shift();
+      // Create a reference to the event handler array
       var handlers = this.__events__[event];
+      // If the event has handlers, call them all
       if (handlers) {
         for (var key in handlers) {
-          if (handlers.hasOwnProperty(key)) handlers[key]();
+          if (handlers.hasOwnProperty(key)) handlers[key].apply(null, args);
         }
       }
     }
