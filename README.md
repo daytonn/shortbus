@@ -1,7 +1,7 @@
 ShortBus
 ========
 
-`ShortBus` is a dead simple javascript event bus. Weighing in at about 1kb it's a very lightweight event system library.
+`ShortBus` is a dead simple javascript event bus. Weighing in at about 1kb it's a very lightweight event system library. The uncompressed and commented library can be found [here](https://raw.github.com/daytonn/shortbus/master/src/shortbus.js).
 
 Installation
 ------------
@@ -16,9 +16,9 @@ Usage
 ### Overview
 
 ```js
-ShortBus.on("someEvent", someEventHandler, this);
-ShortBus.trigger("someEvent");
-ShortBus.off("someEvent", someEventHandler);
+ShortBus.on("eventName", eventHandler, this);
+ShortBus.trigger("eventName");
+ShortBus.off("eventName", eventHandler);
 ```
 
 ### namespace
@@ -27,7 +27,7 @@ The namespace method allows you to change the `ShortBus` namespace to anything y
 
 ```js
 ShortBus.namespace("Dispatcher");
-Dispatcher.on("someEvent", someEventHandler, context);
+Dispatcher.on("eventName", eventHandler, context);
 ShortBus === undefined; // true
 ```
 
@@ -36,7 +36,7 @@ To attach `ShortBus` to an existing namespace, simply pass the namespace object 
 ```js
 var App = {};
 ShortBus.namespace(App);
-App.ShortBus.on("someEvent", someEventHandler, context);
+App.ShortBus.on("eventName", eventHandler, context);
 ShortBus === undefined; // true
 ```
 
@@ -45,6 +45,7 @@ To attach `ShortBus` to an existing namespace with an alias, pass the namespace 
 ```js
 var App = {};
 ShortBus.namespace(App, "Dispatcher");
+App.Dispatcher.on("eventName", eventHandler, context);
 ShortBus === undefined; // true
 ```
 
